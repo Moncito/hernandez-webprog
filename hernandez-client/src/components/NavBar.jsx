@@ -44,6 +44,12 @@ const NavBar = () => {
                             {link.label}
                         </NavLink>
                     ))}
+                    <NavLink
+                        to="/auth/signin"
+                        className="ml-3 inline-flex items-center justify-center rounded-full border-2 border-zinc-900 bg-zinc-900 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-zinc-50 transition hover:bg-zinc-700"
+                    >
+                        Log In
+                    </NavLink>
                 </nav>
 
                 {/* Mobile hamburger */}
@@ -80,6 +86,13 @@ const NavBar = () => {
                                 {link.label}
                             </NavLink>
                         ))}
+                        <NavLink
+                            to="/auth/signin"
+                            className="mt-2 block rounded-xl bg-zinc-900 px-4 py-3 text-center text-base font-semibold text-zinc-50 transition-colors duration-200 hover:bg-zinc-700"
+                            onClick={() => setMobileOpen(false)}
+                        >
+                            Log In
+                        </NavLink>
                     </div>
                 </nav>
             )}
