@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
 
 const inputClasses =
@@ -7,6 +7,14 @@ const inputClasses =
 const actionButtonClassName = 'w-full rounded-xl py-3 text-[11px] tracking-[0.2em]';
 
 const SignInPage = () => {
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // For lab activity simulation, we just navigate to dashboard
+        navigate('/dashboard');
+    };
+
     return (
         <>
             <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">Log In</h1>
@@ -14,7 +22,7 @@ const SignInPage = () => {
                 Access your account using the same monochrome wireframe language used across the site.
             </p>
 
-            <form className="mt-8 space-y-5">
+            <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="signin-email" className="text-sm font-medium text-zinc-700">
                         Email Address
@@ -25,6 +33,7 @@ const SignInPage = () => {
                         placeholder="Placeholder"
                         autoComplete="email"
                         className={inputClasses}
+                        required
                     />
                 </div>
 
@@ -38,6 +47,7 @@ const SignInPage = () => {
                         placeholder="Placeholder"
                         autoComplete="current-password"
                         className={inputClasses}
+                        required
                     />
                     <p className="mt-2 text-xs leading-5 text-zinc-500">
                         It must be a combination of minimum 8 letters, numbers, and symbols.
@@ -59,10 +69,10 @@ const SignInPage = () => {
                 </Button>
 
                 <div className="grid gap-3 pt-2 sm:grid-cols-2">
-                    <Button type="button" variant="secondary" className={actionButtonClassName}>
+                    <Button type="button" variant="secondary" className={actionButtonClassName} onClick={() => navigate('/dashboard')}>
                         Log In with Google
                     </Button>
-                    <Button type="button" variant="secondary" className={actionButtonClassName}>
+                    <Button type="button" variant="secondary" className={actionButtonClassName} onClick={() => navigate('/dashboard')}>
                         Log In with Apple
                     </Button>
                 </div>
