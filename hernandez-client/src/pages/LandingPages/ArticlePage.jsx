@@ -1,10 +1,34 @@
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
-import articles from '../../assets/article-content.js'
+import { fetchArticleBySlug } from '../../services/ArticleService';
 
 function ArticlePage() {
     const { name } = useParams();
-    const article = articles.find(article => article.name === name);
+    const [article, setArticle] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const getArticle = async () => {
+            try {
+                const { data } = await fetchArticleBySlug(name);
+                setArticle(data);
+            } catch (err) {
+                console.error("Article fetch error:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        getArticle();
+    }, [name]);
+
+    if (loading) {
+        return (
+            <div className="flex w-full flex-col gap-6 p-8">
+                <p>Loading article content...</p>
+            </div>
+        );
+    }
 
     if (!article) {
         return (
@@ -33,7 +57,7 @@ function ArticlePage() {
                         {article.title}
                     </h1>
                     <p className="mt-2 text-sm text-zinc-500">
-                        {article.name.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                        {article.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
                     </p>
                 </div>
             </section>
@@ -45,11 +69,10 @@ function ArticlePage() {
                     </div>
 
                     <div className="prose prose-sm max-w-none space-y-4 text-zinc-700">
-                        {article.content.map((paragraph, index) => (
-                            <p key={index} className="text-base leading-7 text-zinc-700 whitespace-pre-wrap">
-                                {paragraph}
-                            </p>
-                        ))}
+                        <p className="text-base leading-7 text-zinc-700 whitespace-pre-wrap">
+                            {article.preview}
+                        </p>
+                        {/* If you add a full 'content' field to your Article model later, you can map it here */}
                     </div>
 
                     <div className="mt-8 border-t-2 border-zinc-900 pt-6">

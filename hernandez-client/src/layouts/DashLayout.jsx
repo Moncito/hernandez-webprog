@@ -22,6 +22,7 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssessmentIcon from "@mui/icons-material/Assessment";
 import PeopleIcon from "@mui/icons-material/People";
+import ArticleIcon from "@mui/icons-material/Article";
 import Button from "@mui/material/Button";
 
 const drawerWidth = 240;
@@ -41,6 +42,13 @@ const dashboardNavItems = [
         label: "Users",
         to: "/dashboard/users",
         icon: PeopleIcon,
+        roles: ["admin"], // Only admin can see Users
+    },
+    {
+        label: "Articles",
+        to: "/dashboard/articles",
+        icon: ArticleIcon,
+        roles: ["admin", "editor"], // Admins and Editors can see Articles
     },
 ];
 
@@ -219,7 +227,9 @@ const DashLayout = () => {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {dashboardNavItems.map(({ label, to, icon: Icon }) => (
+                    {dashboardNavItems
+                        .filter(item => !item.roles || item.roles.includes(localStorage.getItem('type')))
+                        .map(({ label, to, icon: Icon }) => (
                         <ListItem key={label} disablePadding sx={{ display: "block" }}>
                             <ListItemButton
                                 component={Link}

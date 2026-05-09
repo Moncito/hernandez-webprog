@@ -9,13 +9,14 @@ import AboutPage from './pages/LandingPages/AboutPage';
 import ArticleListPage from './pages/LandingPages/ArticleListPage';
 
 import AuthLayout from './layouts/AuthLayout';
-import SignInPage from './pages/AuthPages/SignInPage';
+import Login from './pages/AuthPages/Login';
 import SignUpPage from './pages/AuthPages/SignUpPage';
 
 import DashLayout from './layouts/DashLayout';
 import DashboardPage from './pages/DashboardPages/DashboardPage';
 import ReportsPage from './pages/DashboardPages/ReportsPage';
 import UsersPage from './pages/DashboardPages/UsersPage';
+import DashArticleListPage from './pages/DashboardPages/DashArticleListPage';
 
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -50,7 +51,7 @@ const routes = [
     children: [
       {
         path: "signin",
-        element: <SignInPage />,
+        element: <Login />,
       },
       {
         path: "signup",
@@ -74,6 +75,10 @@ const routes = [
       {
         path: "users",
         element: <UsersPage />,
+      },
+      {
+        path: "articles",
+        element: <DashArticleListPage />,
       }
     ],
   },

@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
+import { createUser } from '../../services/UserService';
 
 const inputClasses =
     'mt-2 w-full rounded-xl border border-zinc-300 bg-zinc-100 px-4 py-3 text-sm text-zinc-900 outline-none transition placeholder:text-zinc-400 focus:border-zinc-900 focus:bg-zinc-50';
@@ -7,82 +9,109 @@ const inputClasses =
 const actionButtonClassName = 'w-full rounded-xl py-3 text-[11px] tracking-[0.2em]';
 
 const SignUpPage = () => {
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        age: 18,
+        gender: 'other',
+        contactNumber: '09123456789',
+        username: '',
+        address: 'N/A',
+        type: 'viewer' // Default to viewer
+    });
+    const [error, setError] = useState('');
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const signupData = { ...formData, username: formData.email.split('@')[0] };
+            await createUser(signupData);
+            navigate('/auth/signin');
+        } catch (err) {
+            setError(err.response?.data?.message || 'Signup failed.');
+        }
+    };
+
     return (
         <>
             <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">Sign Up</h1>
+            {error && <p className="mt-2 text-red-500 text-sm">{error}</p>}
             <p className="mt-3 text-sm leading-6 text-zinc-600">
-                Create your account with the same monochrome layout pattern and shared button treatment.
+                Create your account to get started.
             </p>
 
-            <form className="mt-8 space-y-5">
+            <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
                 <div className="grid gap-5 sm:grid-cols-2">
                     <div>
-                        <label htmlFor="first-name" className="text-sm font-medium text-zinc-700">
+                        <label htmlFor="firstName" className="text-sm font-medium text-zinc-700">
                             First Name
                         </label>
                         <input
-                            id="first-name"
+                            id="firstName"
+                            name="firstName"
                             type="text"
-                            placeholder="Placeholder"
-                            autoComplete="given-name"
+                            placeholder="First Name"
                             className={inputClasses}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
                     <div>
-                        <label htmlFor="last-name" className="text-sm font-medium text-zinc-700">
+                        <label htmlFor="lastName" className="text-sm font-medium text-zinc-700">
                             Last Name
                         </label>
                         <input
-                            id="last-name"
+                            id="lastName"
+                            name="lastName"
                             type="text"
-                            placeholder="Placeholder"
-                            autoComplete="family-name"
+                            placeholder="Last Name"
                             className={inputClasses}
+                            onChange={handleChange}
+                            required
                         />
                     </div>
                 </div>
 
                 <div>
-                    <label htmlFor="signup-email" className="text-sm font-medium text-zinc-700">
+                    <label htmlFor="email" className="text-sm font-medium text-zinc-700">
                         Email
                     </label>
                     <input
-                        id="signup-email"
+                        id="email"
+                        name="email"
                         type="email"
-                        placeholder="Placeholder"
-                        autoComplete="email"
+                        placeholder="Email"
                         className={inputClasses}
+                        onChange={handleChange}
+                        required
                     />
                 </div>
 
                 <div>
-                    <label htmlFor="signup-password" className="text-sm font-medium text-zinc-700">
+                    <label htmlFor="password" className="text-sm font-medium text-zinc-700">
                         Password
                     </label>
                     <input
-                        id="signup-password"
+                        id="password"
+                        name="password"
                         type="password"
-                        placeholder="Placeholder"
-                        autoComplete="new-password"
+                        placeholder="Password"
                         className={inputClasses}
+                        onChange={handleChange}
+                        required
                     />
-                    <p className="mt-2 text-xs leading-5 text-zinc-500">
-                        Use a secure password with letters, numbers, and symbols.
-                    </p>
                 </div>
 
                 <Button type="submit" variant="primary" className={actionButtonClassName}>
                     Create Account
                 </Button>
-
-                <div className="grid gap-3 pt-2 sm:grid-cols-2">
-                    <Button type="button" variant="secondary" className={actionButtonClassName}>
-                        Sign Up with Google
-                    </Button>
-                    <Button type="button" variant="secondary" className={actionButtonClassName}>
-                        Sign Up with Apple
-                    </Button>
-                </div>
             </form>
 
             <div className="mt-8 border-t border-zinc-200 pt-6 text-sm text-zinc-600">
